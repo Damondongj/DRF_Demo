@@ -6,8 +6,6 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-
-
 class ArticleList(APIView):
     """
     List all articles, or create a new article.
