@@ -39,3 +39,6 @@ beautifulsoup4~=4.12.2
 selenium~=3.141.0
 wget~=3.2
 aiohttp~=3.8.4
+plotly~=5.14.1
+pandas~=1.1.5
+reportlab~=3.6.8
