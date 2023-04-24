@@ -72,17 +72,17 @@ elements.append(Spacer(1, 0.3 * inch))
 section2_style = ParagraphStyle(name='section_style', fontName=TITLE_FONT, fontSize=FONTSIZE_SM)
 elements.append(Paragraph("2、考试成绩", section2_style))
 elements.append(Spacer(1, 0.1 * inch))
-img = PILImage.open("score.png")
+img = PILImage.open("score_pie.png")
 width, height = img.size
 aspect = height / float(width)
-elements.append(Image("score.png", width=5 * inch, height=(6 * aspect) * inch))
-elements.append(Spacer(1, 0.5 * inch))
+elements.append(Image("score_pie.png", width=4 * inch, height=3 * inch))
+# elements.append(Spacer(1, 0.5 * inch))
 
 # 3、试卷内容1
 section3_style = ParagraphStyle(name='section_style', fontName=TITLE_FONT, fontSize=FONTSIZE_SM)
 elements.append(Paragraph("3、试卷内容", section3_style))
 elements.append(Spacer(1, 0.1 * inch))
-img = PILImage.open("score.png")
+img = PILImage.open("antenna_pie_chart.png")
 width, height = img.size
 aspect = height / float(width)
 elements.append(Image("antenna_pie_chart.png", width=4.4 * inch, height=3.3 * inch))
@@ -94,10 +94,10 @@ elements.append(PageBreak())
 section4_style = ParagraphStyle(name='section_style', fontName=TITLE_FONT, fontSize=FONTSIZE_SM)
 elements.append(Paragraph("4、试卷内容", section4_style))
 elements.append(Spacer(1, 0.1 * inch))
-img = PILImage.open("score.png")
+img = PILImage.open("method_comparison.png")
 width, height = img.size
 aspect = height / float(width)
-elements.append(Image("score.png", width=6 * inch, height=(8 * aspect) * inch))
+elements.append(Image("method_comparison.png", width=6 * inch, height=4.5 * inch))
 elements.append(Spacer(1, 0.3 * inch))
 
 # 添加答题详情
