@@ -16,8 +16,8 @@ def territory_drc(file_path):
             "model_name": first_line.strip().split("\\")[-1],
             "errors": [parse_line(line) for i, line in enumerate(f) if i >= 4]
         }
-        print(json.dumps(result))
+    return json.dumps(result)
 
 
 if __name__ == '__main__':
-    territory_drc(r"C:\Users\star\Desktop\DRC\DRC\ProgramControll1_SCH_MPNu1.ERR")
+    print(territory_drc(r"C:\Users\star\Desktop\DRC\DRC\ProgramControll1_SCH_MPNu1.ERR"))

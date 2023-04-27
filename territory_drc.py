@@ -24,4 +24,4 @@ def territory_drc(file_path):
 
 
 if __name__ == '__main__':
-    territory_drc(r"C:\Users\star\Desktop\DRC\DRC\Design Rule Check - ProgramControll1_PCB_Short1.drc")
+    print(territory_drc(r"C:\Users\star\Desktop\DRC\DRC\Design Rule Check - ProgramControll1_PCB_Short1.drc"))
