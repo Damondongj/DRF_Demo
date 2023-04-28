@@ -43,8 +43,9 @@ table = go.Table(
 )
 
 fig = go.Figure(data=[table])
-# fig.update_layout(
-#     width=500, height=380
-# )
+fig.update_layout(
+    # width=500, height=380
+    margin=dict(t=20, b=0),
+)
 
 fig.write_image('plotly_5.png', format='png')
