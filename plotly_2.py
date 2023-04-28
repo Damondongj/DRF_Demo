@@ -34,7 +34,7 @@ fig.update_layout(
 fig.add_annotation(
     x=0.5,
     y=0.5,
-    text=f"{score}%",
+    text=f"{score}",
     font=dict(family='Arial', size=36, color='#E83F2F'),
     showarrow=False,
 )
@@ -42,8 +42,8 @@ fig.add_annotation(
 fig.add_annotation(
     x=0.5,
     y=0.2,
-    text="得分",
-    font=dict(family='Arial', size=16, color='#E83F2F'),
+    text="分数",
+    font=dict(family='Arial', size=32, color='#E83F2F'),
     showarrow=False,
 )
 
