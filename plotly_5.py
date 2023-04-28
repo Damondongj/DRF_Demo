@@ -10,26 +10,19 @@ datas = [
     {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '阵列天线',
      'number_of_selected': 10},
     {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
-     'number_of_selected': 15}
-    ,
+     'number_of_selected': 15},
+    {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
+     'number_of_selected': 15},
+    {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
+     'number_of_selected': 15},
+    {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
+     'number_of_selected': 15},
+    {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
+     'number_of_selected': 15},
+    {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
+     'number_of_selected': 15},
     {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
      'number_of_selected': 15}
-    ,
-    {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
-     'number_of_selected': 15}
-    ,
-    {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
-     'number_of_selected': 15}
-    ,
-    {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
-     'number_of_selected': 15}
-    ,
-    {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
-     'number_of_selected': 15}
-    ,
-    {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA', 'question_type': '面天线',
-     'number_of_selected': 15}
-
 ]
 
 titles = list(datas[0].keys())
