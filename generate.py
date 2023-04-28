@@ -13,7 +13,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import SimpleDocTemplate, Table, Image, Paragraph, Spacer, PageBreak, TableStyle
 
-TEMP_PATH = "/Users/damon/projects/web/DRF_Demo/media"
+TEMP_PATH = r"E:\projects\djangoProject\DRF_Demo\media"
 
 
 class PlotImage(object):
@@ -57,7 +57,7 @@ class PlotImage(object):
         fig.add_annotation(x=0.5, y=0.2, text="分数", font=dict(family='Arial', size=32, color='#E83F2F'),
                            showarrow=False)
 
-        fig.write_image(TEMP_PATH + 'plotly_2.png')
+        fig.write_image(TEMP_PATH + "\\" + 'plotly_2.png')
 
     def plotly_part3(self):
         plot_data = [{'question_type': '反射天线', 'number_of_selected': 5},
@@ -82,7 +82,7 @@ class PlotImage(object):
         fig.update_traces(textposition='outside', textinfo='percent+label', textfont_size=12,
                           insidetextorientation='radial')
 
-        fig.write_image(TEMP_PATH + "plotly_3.png")
+        fig.write_image(TEMP_PATH + "\\" + "\\" + "plotly_3.png")
 
     def plotly_part4(self):
         data = {'Method': ['Method 1', 'Method 2', 'Method 3', 'Method 4', 'Method 5', 'Method 6'],
@@ -95,7 +95,7 @@ class PlotImage(object):
         fig.update_traces(textposition='auto')
         fig.update_layout(
             width=500, height=380, title='能力图谱分析', xaxis_title='', yaxis_title='准确率', showlegend=False)
-        fig.write_image(TEMP_PATH + 'plotly_4.png')
+        fig.write_image(TEMP_PATH + "\\" + 'plotly_4.png')
 
     def plotly_part5(self):
         datas = [
@@ -147,7 +147,7 @@ class PlotImage(object):
             margin=dict(t=20, b=0),
         )
 
-        fig.write_image(TEMP_PATH + 'plotly_5.png', format='png')
+        fig.write_image(TEMP_PATH + "\\" + 'plotly_5.png', format='png')
 
 
 def generate():
@@ -168,7 +168,7 @@ def generate():
     pdfmetrics.registerFont(TTFont('SimSun', 'simsun.ttc'))
     pdfmetrics.registerFont(TTFont('Microsoft YaHei', 'msyh.ttc'))
 
-    file_path = TEMP_PATH + "report.pdf"
+    file_path = TEMP_PATH + "\\" + "report.pdf"
     if os.path.exists(file_path):
         os.remove(file_path)
 
@@ -217,14 +217,14 @@ def generate():
     section2_style = ParagraphStyle(name='section_style', fontName=TITLE_FONT, fontSize=FONTSIZE_SM)
     elements.append(Paragraph("2、考试成绩", section2_style))
     elements.append(Spacer(1, 0.1 * inch))
-    elements.append(Image(TEMP_PATH + "plotly_2.png", width=4 * inch, height=3 * inch))
+    elements.append(Image(TEMP_PATH + "\\" + "plotly_2.png", width=4 * inch, height=3 * inch))
 
     # 3、试卷内容1
     section3_style = ParagraphStyle(name='section_style', fontName=TITLE_FONT, fontSize=FONTSIZE_SM)
     elements.append(Paragraph("3、试卷内容", section3_style))
     elements.append(Spacer(1, 0.1 * inch))
     elements.append(
-        Image(TEMP_PATH + "plotly_3.png", width=4.4 * inch, height=3.3 * inch))
+        Image(TEMP_PATH + "\\" + "plotly_3.png", width=4.4 * inch, height=3.3 * inch))
 
     elements.append(PageBreak())
 
@@ -232,14 +232,14 @@ def generate():
     section4_style = ParagraphStyle(name='section_style', fontName=TITLE_FONT, fontSize=FONTSIZE_SM)
     elements.append(Paragraph("4、试卷内容", section4_style))
     elements.append(Spacer(1, 0.1 * inch))
-    elements.append(Image(TEMP_PATH + "plotly_4.png", width=6 * inch, height=4.5 * inch))
+    elements.append(Image(TEMP_PATH + "\\" + "plotly_4.png", width=6 * inch, height=4.5 * inch))
     elements.append(Spacer(1, 0.3 * inch))
 
     # 添加答题详情
     section5_style = ParagraphStyle(name='section_style', fontName=TITLE_FONT, fontSize=FONTSIZE_SM)
     elements.append(Paragraph("5、答题详情", section5_style))
     elements.append(Spacer(1, 0.1 * inch))
-    elements.append(Image(TEMP_PATH + "plotly_5.png", width=6 * inch, height=4.5 * inch))
+    elements.append(Image(TEMP_PATH + "\\" + "plotly_5.png", width=6 * inch, height=4.5 * inch))
 
     doc.build(elements)
 
