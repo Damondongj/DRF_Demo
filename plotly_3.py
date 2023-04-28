@@ -8,9 +8,10 @@ headers = {"Accept": "application/json, text/plain, */*", "Accept-Encoding": "gz
            "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8,zh-CN;q=0.7,zh;q=0.6", "Connection": "keep-alive",
            "Cookie": "csrftoken=p5y0WSEDCYdi0gaZ9MlemmrEF6rAj7z6pieDQlnwqEzLxGazMdakNZqNbdPlqBJf; ab.storage.deviceId.a9882122-ac6c-486a-bc3b-fab39ef624c5=%7B%22g%22%3A%223ae4815b-82dc-d49c-eea0-b8adec4a1300%22%2C%22c%22%3A1681883366448%2C%22l%22%3A1681883366448%7D",
            "Host": "scl.chipslightai.com", "Referer": "https://scl.chipslightai.com/",
+           "sec-ch-ua": "\"Chromium\";v=\"112\", \"Google Chrome\";v=\"112\", \"Not:A-Brand\";v=\"99\"",
            "sec-ch-ua-mobile": "?0", "sec-ch-ua-platform": "\"Windows\"", "Sec-Fetch-Dest": "empty",
            "Sec-Fetch-Mode": "cors", "Sec-Fetch-Site": "same-origin",
-           "token": "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQHFxLmNvbSIsImV4cCI6MTY4MjQ4ODE2NH0.zhBTPb3eGxSV3XosOwAnOLG43puXp212rr1eD6AHUcM",
+           "token": "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQHFxLmNvbSIsImV4cCI6MTY4MzI1NTMzM30.-ERWqaDpPw8x0fd_yzaTFgiDKP_gZ_UqP6J-JqYVPOc",
            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"}
 
 response = requests.get(url, headers=headers)
@@ -42,4 +43,4 @@ fig.update_layout(
 fig.update_traces(textposition='outside', textinfo='percent+label', textfont_size=12,
                   insidetextorientation='radial')
 
-fig.write_image("antenna_pie_chart.png")
+fig.write_image("plotly_3.png")

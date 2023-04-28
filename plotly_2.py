@@ -48,4 +48,4 @@ fig.add_annotation(
 )
 
 # 保存图像
-fig.write_image('score_pie.png')
+fig.write_image('plotly_2.png')
