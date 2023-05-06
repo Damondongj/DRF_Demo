@@ -17,8 +17,21 @@ TEMP_PATH = r"E:\projects\djangoProject\DRF_Demo\media"
 
 
 class PlotImage(object):
-    def __int__(self):
-        pass
+    def __init__(self, data):
+        self.data = self.pre_process(data)
+
+    def pre_process(self, data):
+        df = pd.DataFrame(data["examination_paper_info"])
+
+        grouped = df.groupby("type").agg({"total_score": "sum", "score": "sum"})
+        counts = df["type"].value_counts()
+        grouped["counts"] = counts
+
+        # data["sum_result"] = grouped.reset_index().to_dict(orient="records")
+        data["sum_result"] = grouped.reset_index()
+        data["score"] = df["score"].sum()
+
+        return data
 
     def plot(self):
         self.plotly_part2()
@@ -27,7 +40,7 @@ class PlotImage(object):
         self.plotly_part5()
 
     def plotly_part2(self):
-        score = 85
+        score = self.data["score"]
 
         fig = go.Figure(go.Pie(
             values=[score, 100 - score],
@@ -60,79 +73,43 @@ class PlotImage(object):
         fig.write_image(TEMP_PATH + "\\" + 'plotly_2.png')
 
     def plotly_part3(self):
-        plot_data = [{'question_type': '反射天线', 'number_of_selected': 5},
-                     {'question_type': '喇叭天线', 'number_of_selected': 20},
-                     {'question_type': '线天线', 'number_of_selected': 10},
-                     {'question_type': '阵列天线', 'number_of_selected': 10},
-                     {'question_type': '面天线', 'number_of_selected': 15}]
-        df = pd.DataFrame(plot_data)
+        df = self.data["sum_result"].loc[:, ["type", "counts"]]
 
-        total = df['number_of_selected'].sum()
-        df['percentage'] = df['number_of_selected'] / total
+        total = df['counts'].sum()
+        df['percentage'] = df['counts'] / total
 
-        fig = px.pie(df, values='percentage', names='question_type',
-                     labels={'percentage': '占比', 'question_type': '类型'})
+        fig = px.pie(df, values='percentage', names='type',
+                     labels={'percentage': '占比', 'type': '类型'})
 
         fig.update_layout(
             margin=dict(l=50, r=50, t=50, b=50),  # 设置图表周围的边距
-            legend=dict(x=-0.2, y=0.5, orientation='v'),  # 设置图例的位置和方向
+            legend=dict(x=-0.4, y=1.5, orientation='v'),  # 设置图例的位置和方向
             width=500, height=380
         )
 
         fig.update_traces(textposition='outside', textinfo='percent+label', textfont_size=12,
                           insidetextorientation='radial')
 
-        fig.write_image(TEMP_PATH + "\\" + "\\" + "plotly_3.png")
+        fig.write_image(TEMP_PATH + "\\" + "plotly_3.png")
 
     def plotly_part4(self):
-        data = {'Method': ['Method 1', 'Method 2', 'Method 3', 'Method 4', 'Method 5', 'Method 6'],
-                'Accuracy': [0.85, 0.92, 0.78, 0.34, 0.78, 0.34]}
-        df = pd.DataFrame(data)
+        df = self.data["sum_result"].loc[:, ["type", "total_score", "score"]]
+        df["Accuracy"] = df["score"] / df["total_score"]
+        df = df.loc[:, ["type", "Accuracy"]]
 
         colors = px.colors.qualitative.Plotly[:len(df)]
 
-        fig = px.bar(df, x='Method', y='Accuracy', text=df['Accuracy'].apply(lambda x: f'{x:.2%}'), color=colors)
+        fig = px.bar(df, x='type', y='Accuracy', text=df['Accuracy'].apply(lambda x: f'{x:.2%}'), color=colors)
         fig.update_traces(textposition='auto')
         fig.update_layout(
             width=500, height=380, title='能力图谱分析', xaxis_title='', yaxis_title='准确率', showlegend=False)
         fig.write_image(TEMP_PATH + "\\" + 'plotly_4.png')
 
     def plotly_part5(self):
-        datas = [
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '反射天线',
-             'number_of_selected': 5},
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '喇叭天线',
-             'number_of_selected': 20},
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '线天线',
-             'number_of_selected': 10},
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '阵列天线',
-             'number_of_selected': 10},
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '面天线',
-             'number_of_selected': 15},
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '面天线',
-             'number_of_selected': 15},
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '面天线',
-             'number_of_selected': 15},
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '面天线',
-             'number_of_selected': 15},
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '面天线',
-             'number_of_selected': 15},
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '面天线',
-             'number_of_selected': 15},
-            {'paper_type': '天线类EDA', 'paper_type_1': '天线类EDA', 'paper_type_2': '天线类EDA',
-             'question_type': '面天线',
-             'number_of_selected': 15}
-        ]
+        for examination_info in self.data["examination_paper_info"]:
+            examination_info["score_ratio"] = examination_info["score"] / examination_info["total_score"]
+
+        datas = self.data["examination_paper_info"]
 
         titles = list(datas[0].keys())
         values = [[data[title] for data in datas] for title in titles]
@@ -150,13 +127,12 @@ class PlotImage(object):
         fig.write_image(TEMP_PATH + "\\" + 'plotly_5.png', format='png')
 
 
-def generate():
-    """
-        generate pdf
-    """
-    plot = PlotImage()
+def generate_picture(data):
+    plot = PlotImage(data)
     plot.plot()
 
+
+def generate_pdf(data):
     # 定义常量
     TITLE = "EDA比测验证报告"
     TITLE_FONT = "Microsoft YaHei"
@@ -193,8 +169,8 @@ def generate():
     label_style = ParagraphStyle(name='label_style', fontName=TABLE_FONT, fontSize=10)
     para_style = ParagraphStyle(name='para_style', fontName=TABLE_FONT, fontSize=10, leading=16)
     data = [
-        [Paragraph("被测EDA名称：", label_style), Paragraph("星火技术", para_style)],
-        [Paragraph("被测EDA简介：", label_style), Paragraph("这是CST", para_style)]
+        [Paragraph("被测EDA名称：", label_style), Paragraph(f'{data["name"]}', para_style)],
+        [Paragraph("被测EDA简介：", label_style), Paragraph(f'{data["description"]}', para_style)]
     ]
 
     table = Table(data, colWidths=[90, 320])
@@ -246,5 +222,30 @@ def generate():
     return file_path
 
 
+def generate(data):
+    """
+        generate pdf
+    """
+    generate_picture(data)
+    file_path = generate_pdf(data)
+    return file_path
+
+
 if __name__ == '__main__':
-    generate()
+    data = {
+        "name": "aaa",
+        "description": "fsdfsadfsdf",
+        "examination_paper_info": [
+            {"type": "aaaaa", "total_score": 10, "score": 8},
+            {"type": "aaaaa", "total_score": 20, "score": 12},
+            {"type": "bbbbb", "total_score": 10, "score": 8},
+            {"type": "ccccc", "total_score": 10, "score": 7},
+            {"type": "ddddd", "total_score": 5, "score": 4},
+            {"type": "ddddd", "total_score": 5, "score": 3},
+            {"type": "eeeee", "total_score": 20, "score": 20},
+            {"type": "fffff", "total_score": 10, "score": 8},
+            {"type": "ggggg", "total_score": 10, "score": 9},
+        ],
+    }
+    path = generate(data)
+    print(path)
