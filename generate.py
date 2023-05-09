@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from pathlib import Path
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -13,7 +14,9 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import SimpleDocTemplate, Table, Image, Paragraph, Spacer, PageBreak, TableStyle
 
-TEMP_PATH = r"E:\projects\djangoProject\DRF_Demo\media"
+TEMP_PATH = str(Path.cwd()) + "\\media\\temp_file"
+if not os.path.exists(TEMP_PATH):
+    os.makedirs(TEMP_PATH)
 
 
 class PlotImage(object):
@@ -21,15 +24,15 @@ class PlotImage(object):
         self.data = self.pre_process(data)
 
     def pre_process(self, data):
-        df = pd.DataFrame(data["examination_paper_info"])
+        df = pd.DataFrame(data["test_questions"])
 
-        grouped = df.groupby("type").agg({"total_score": "sum", "score": "sum"})
-        counts = df["type"].value_counts()
+        grouped = df.groupby("total_type").agg({"score": "sum", "got_score": "sum"})
+        counts = df["total_type"].value_counts()
         grouped["counts"] = counts
 
         # data["sum_result"] = grouped.reset_index().to_dict(orient="records")
         data["sum_result"] = grouped.reset_index()
-        data["score"] = df["score"].sum()
+        data["score"] = df["got_score"].sum()
 
         return data
 
@@ -73,12 +76,12 @@ class PlotImage(object):
         fig.write_image(TEMP_PATH + "\\" + 'plotly_2.png')
 
     def plotly_part3(self):
-        df = self.data["sum_result"].loc[:, ["type", "counts"]]
+        df = self.data["sum_result"].loc[:, ["total_type", "counts"]]
 
         total = df['counts'].sum()
         df['percentage'] = df['counts'] / total
 
-        fig = px.pie(df, values='percentage', names='type',
+        fig = px.pie(df, values='percentage', names='total_type',
                      labels={'percentage': '占比', 'type': '类型'})
 
         fig.update_layout(
@@ -93,23 +96,23 @@ class PlotImage(object):
         fig.write_image(TEMP_PATH + "\\" + "plotly_3.png")
 
     def plotly_part4(self):
-        df = self.data["sum_result"].loc[:, ["type", "total_score", "score"]]
-        df["Accuracy"] = df["score"] / df["total_score"]
-        df = df.loc[:, ["type", "Accuracy"]]
+        df = self.data["sum_result"].loc[:, ["total_type", "score", "got_score"]]
+        df["Accuracy"] = df["got_score"] / df["score"]
+        df = df.loc[:, ["total_type", "Accuracy"]]
 
         colors = px.colors.qualitative.Plotly[:len(df)]
 
-        fig = px.bar(df, x='type', y='Accuracy', text=df['Accuracy'].apply(lambda x: f'{x:.2%}'), color=colors)
+        fig = px.bar(df, x='total_type', y='Accuracy', text=df['Accuracy'].apply(lambda x: f'{x:.2%}'), color=colors)
         fig.update_traces(textposition='auto')
         fig.update_layout(
             width=500, height=380, title='能力图谱分析', xaxis_title='', yaxis_title='准确率', showlegend=False)
         fig.write_image(TEMP_PATH + "\\" + 'plotly_4.png')
 
     def plotly_part5(self):
-        for examination_info in self.data["examination_paper_info"]:
-            examination_info["score_ratio"] = examination_info["score"] / examination_info["total_score"]
+        for question in self.data["test_questions"]:
+            question["score_ratio"] = question["got_score"] / question["score"]
 
-        datas = self.data["examination_paper_info"]
+        datas = self.data["test_questions"]
 
         titles = list(datas[0].keys())
         values = [[data[title] for data in datas] for title in titles]
@@ -127,7 +130,7 @@ class PlotImage(object):
         fig.write_image(TEMP_PATH + "\\" + 'plotly_5.png', format='png')
 
 
-def generate_picture(data):
+def generate_pictures(data):
     plot = PlotImage(data)
     plot.plot()
 
@@ -169,8 +172,8 @@ def generate_pdf(data):
     label_style = ParagraphStyle(name='label_style', fontName=TABLE_FONT, fontSize=10)
     para_style = ParagraphStyle(name='para_style', fontName=TABLE_FONT, fontSize=10, leading=16)
     data = [
-        [Paragraph("被测EDA名称：", label_style), Paragraph(f'{data["name"]}', para_style)],
-        [Paragraph("被测EDA简介：", label_style), Paragraph(f'{data["description"]}', para_style)]
+        [Paragraph("被测EDA名称：", label_style), Paragraph(f'{data["test_eda_name"]}', para_style)],
+        [Paragraph("被测EDA简介：", label_style), Paragraph(f'{data["test_eda_desc"]}', para_style)]
     ]
 
     table = Table(data, colWidths=[90, 320])
@@ -226,25 +229,34 @@ def generate(data):
     """
         generate pdf
     """
-    generate_picture(data)
+    generate_pictures(data)
     file_path = generate_pdf(data)
     return file_path
 
 
 if __name__ == '__main__':
     data = {
-        "name": "aaa",
-        "description": "fsdfsadfsdf",
-        "examination_paper_info": [
-            {"type": "aaaaa", "total_score": 10, "score": 8},
-            {"type": "aaaaa", "total_score": 20, "score": 12},
-            {"type": "bbbbb", "total_score": 10, "score": 8},
-            {"type": "ccccc", "total_score": 10, "score": 7},
-            {"type": "ddddd", "total_score": 5, "score": 4},
-            {"type": "ddddd", "total_score": 5, "score": 3},
-            {"type": "eeeee", "total_score": 20, "score": 20},
-            {"type": "fffff", "total_score": 10, "score": 8},
-            {"type": "ggggg", "total_score": 10, "score": 9},
+        "test_eda_name": "aaa",
+        "test_eda_desc": "fsdfsadfsdf",
+        "test_questions": [
+            {"total_type": "aaaaa", "score": 10, "got_score": 8, "product_type": "阵列天线",
+             "test_function": "版图设计"},
+            {"total_type": "aaaaa", "score": 20, "got_score": 12, "product_type": "阵列天线",
+             "test_function": "版图设计"},
+            {"total_type": "bbbbb", "score": 10, "got_score": 8, "product_type": "阵列天线",
+             "test_function": "版图设计"},
+            {"total_type": "ccccc", "score": 10, "got_score": 7, "product_type": "阵列天线",
+             "test_function": "版图设计"},
+            {"total_type": "ddddd", "score": 5, "got_score": 4, "product_type": "阵列天线",
+             "test_function": "版图设计"},
+            {"total_type": "ddddd", "score": 5, "got_score": 3, "product_type": "阵列天线",
+             "test_function": "版图设计"},
+            {"total_type": "eeeee", "score": 20, "got_score": 20, "product_type": "阵列天线",
+             "test_function": "版图设计"},
+            {"total_type": "fffff", "score": 10, "got_score": 8, "product_type": "阵列天线",
+             "test_function": "版图设计"},
+            {"total_type": "ggggg", "score": 10, "got_score": 9, "product_type": "阵列天线",
+             "test_function": "版图设计"},
         ],
     }
     path = generate(data)
