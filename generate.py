@@ -64,7 +64,7 @@ class PlotImage(object):
                 'yanchor': 'top',
                 'font': dict(family='Arial', size=20, color='#333'),
             },
-            plot_bgcolor='#FFFFFF', width=500, height=380, margin=dict(t=80, b=50, l=50, r=50)
+            plot_bgcolor='#FFFFFF', width=500, height=380, margin=dict(t=80, b=40, l=0, r=0)
         )
 
         fig.add_annotation(x=0.5, y=0.5, text=f"{score}", font=dict(family='Arial', size=36, color='#E83F2F'),
@@ -73,7 +73,7 @@ class PlotImage(object):
         fig.add_annotation(x=0.5, y=0.2, text="分数", font=dict(family='Arial', size=32, color='#E83F2F'),
                            showarrow=False)
 
-        fig.write_image(TEMP_PATH + "\\" + 'plotly_2.png')
+        fig.write_image(TEMP_PATH + "\\" + 'plotly_2.png', scale=10)
 
     def plotly_part3(self):
         df = self.data["sum_result"].loc[:, ["total_type", "counts"]]
@@ -85,7 +85,7 @@ class PlotImage(object):
                      labels={'percentage': '占比', 'type': '类型'})
 
         fig.update_layout(
-            margin=dict(l=50, r=50, t=50, b=50),  # 设置图表周围的边距
+            margin=dict(l=0, r=0, t=0, b=0),  # 设置图表周围的边距
             legend=dict(x=-0.4, y=1.5, orientation='v'),  # 设置图例的位置和方向
             width=500, height=380
         )
@@ -93,7 +93,7 @@ class PlotImage(object):
         fig.update_traces(textposition='outside', textinfo='percent+label', textfont_size=12,
                           insidetextorientation='radial')
 
-        fig.write_image(TEMP_PATH + "\\" + "plotly_3.png")
+        fig.write_image(TEMP_PATH + "\\" + "plotly_3.png", scale=10)
 
     def plotly_part4(self):
         df = self.data["sum_result"].loc[:, ["total_type", "score", "got_score"]]
@@ -105,29 +105,40 @@ class PlotImage(object):
         fig = px.bar(df, x='total_type', y='Accuracy', text=df['Accuracy'].apply(lambda x: f'{x:.2%}'), color=colors)
         fig.update_traces(textposition='auto')
         fig.update_layout(
-            width=500, height=380, title='能力图谱分析', xaxis_title='', yaxis_title='准确率', showlegend=False)
-        fig.write_image(TEMP_PATH + "\\" + 'plotly_4.png')
+            width=600, height=450, title='能力图谱分析', xaxis_title='', yaxis_title='准确率', showlegend=False,
+            margin=dict(l=60, r=60, t=80, b=0))
+        fig.write_image(TEMP_PATH + "\\" + 'plotly_4.png', scale=10)
 
     def plotly_part5(self):
-        for question in self.data["test_questions"]:
-            question["score_ratio"] = question["got_score"] / question["score"]
-
         datas = self.data["test_questions"]
+
+        for item in datas:
+            item["类型"] = item.pop("total_type")  # 将 "total_type" 替换为 "类型"
+            item["分值"] = item.pop("score")  # 将 "score" 替换为 "得分"
+            item["得分"] = item.pop("got_score")
+            item["产品类型"] = item.pop("product_type")
+            item["测试功能"] = item.pop("test_function")
 
         titles = list(datas[0].keys())
         values = [[data[title] for data in datas] for title in titles]
 
         table = go.Table(
             header=dict(values=titles),
-            cells=dict(values=values)
+            cells=dict(values=values), columnwidth=[200, 200, 200]
         )
 
         fig = go.Figure(data=[table])
-        fig.update_layout(
-            margin=dict(t=20, b=0),
+        fig.update_traces(
+            header=dict(font=dict(size=14)),  # 设置表头字体大小
+            cells=dict(font=dict(size=12)),  # 设置单元格字体大小
         )
 
-        fig.write_image(TEMP_PATH + "\\" + 'plotly_5.png', format='png')
+        fig.update_layout(
+            width=600, height=450,
+            margin=dict(l=0, r=0, t=60, b=0),
+        )
+
+        fig.write_image(TEMP_PATH + "\\" + 'plotly_5.png', format='png', scale=10)
 
 
 def generate_pictures(data):
@@ -203,8 +214,7 @@ def generate_pdf(data):
     elements.append(Paragraph("3、试卷内容", section3_style))
     elements.append(Spacer(1, 0.1 * inch))
     elements.append(
-        Image(TEMP_PATH + "\\" + "plotly_3.png", width=4.4 * inch, height=3.3 * inch))
-
+        Image(TEMP_PATH + "\\" + "plotly_3.png", width=5 * inch, height=3.9 * inch))
     elements.append(PageBreak())
 
     # 添加试卷内容2
