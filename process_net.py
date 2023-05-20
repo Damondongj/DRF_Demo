@@ -1,8 +1,10 @@
 import json
+from pathlib import Path
 
 
 def process_net(file_path):
     result = {
+        "model_path": Path(file_path).stem,
         "PARTS_LIST": {},
         "NET_LIST": {}
     }
@@ -11,7 +13,7 @@ def process_net(file_path):
 
         parts_list_end = 0
         for i, line in enumerate(contents):
-            if line.startswith("Comment") or line.startswith("PARTS LIST"):
+            if line.startswith("PARTS LIST") or line == "\n":
                 continue
 
             if line.startswith("EOS"):
@@ -37,4 +39,5 @@ def process_net(file_path):
 
 
 if __name__ == '__main__':
-    print(process_net(r"C:\Users\star\Desktop\ProgramContro_1\ProgramControll1_SCH_1.NET"))
+    print(process_net(
+        r"C:\Users\star\Documents\WeChat Files\wxid_kor8xca5ob0x22\FileStorage\File\2023-05\3_Radar1_SCH_1.NET"))
